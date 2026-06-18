@@ -30,12 +30,16 @@ Four panels on one screen:
 ## Game flow
 
 1. User selects one or more chords into the tray (via root → chords → tray, as above).
-2. User presses **Play**. The app picks one chord at random from the tray and plays it,
-   excluding whichever chord was played last (no immediate repeat).
-3. User guesses by clicking one of the chords in the tray.
-4. The round result (chord played, chord guessed, correct/wrong) is added to the top of the
+2. **Preview**: while no round is active (before the first Play, or right after a guess),
+   clicking a chord in the tray just plays that chord — no scoring, no round started. This
+   lets the user ear-train on the selected chords before being quizzed on them.
+3. User presses **Play**. The app picks one chord at random from the tray and plays it,
+   excluding whichever chord was played last (no immediate repeat). This starts a round.
+4. Once a round is active, clicking a chord in the tray submits it as a guess instead of
+   previewing it.
+5. The round result (chord played, chord guessed, correct/wrong) is added to the top of the
    scoreboard's history list and the tally updates.
-5. Before guessing, the user may press **Play** again to replay the *same* chord that's
+6. Before guessing, the user may press **Play** again to replay the *same* chord that's
    currently up for guessing (does not advance to a new chord).
 
 ## Chord vocabulary & voicing

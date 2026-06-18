@@ -82,16 +82,19 @@ with middle:
         for col, chord in zip(tray_cols[:-1], pool):
             with col:
                 guessing = st.session_state.current_chord is not None
-                if st.button(chord.name, key=f"tray_{chord.name}", disabled=not guessing):
-                    result = exercise.record_guess(
-                        played=st.session_state.current_chord.name, guessed=chord.name
-                    )
-                    st.session_state.current_chord = None
-                    st.session_state.current_audio = None
-                    if result.correct:
-                        st.toast(f"Correct! It was {result.played}.", icon="✅")
+                if st.button(chord.name, key=f"tray_{chord.name}"):
+                    if guessing:
+                        result = exercise.record_guess(
+                            played=st.session_state.current_chord.name, guessed=chord.name
+                        )
+                        st.session_state.current_chord = None
+                        st.session_state.current_audio = None
+                        if result.correct:
+                            st.toast(f"Correct! It was {result.played}.", icon="✅")
+                        else:
+                            st.toast(f"Wrong — that was {result.played}, you guessed {result.guessed}.", icon="❌")
                     else:
-                        st.toast(f"Wrong — that was {result.played}, you guessed {result.guessed}.", icon="❌")
+                        st.session_state.current_audio = _play_chord(chord)
                     st.rerun()
         with tray_cols[-1]:
             if st.button("▶ Play", key="play_button", disabled=not pool):
