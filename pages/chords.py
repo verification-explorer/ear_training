@@ -118,6 +118,11 @@ with middle:
     if not pool:
         st.caption("No chords selected yet.")
     else:
+        if st.button("🧹 Clear all", key="clear_all"):
+            st.session_state.pool = []
+            st.session_state.current_chord = None
+            st.rerun()
+
         tray_cols = st.columns(len(pool) + 1)
         for col, chord in zip(tray_cols[:-1], pool):
             with col:

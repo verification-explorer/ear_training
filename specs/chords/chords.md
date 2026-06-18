@@ -23,7 +23,9 @@ Four panels on one screen:
   selected tray; it stays clickable to add more chords after picking a different root too
   (selection accumulates across roots).
 - **Selected chords (middle, lower)** — tray of every chord added so far. Clicking a chord
-  here again removes it from the tray. A **Play** button sits at the right of this row.
+  here again removes it from the tray. A **Play** button sits at the right of this row. A
+  **Clear all** button above the tray empties it in one click and cancels any round in
+  progress.
 - **Scoreboard (right, vertical)** — running history of rounds, newest on top: played chord,
   guessed chord, and correct/wrong, plus a running tally (e.g. "7/10 correct").
 
