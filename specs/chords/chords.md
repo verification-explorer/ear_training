@@ -52,9 +52,13 @@ Four panels on one screen:
 
 - For a selected root, the chords window shows a curated, expandable list of qualities built
   directly on that root — no scale or key context involved.
-- Currently ships 5 qualities: **major, minor, sus2, sus4, dominant 7th** (e.g. root A → A, Am,
-  Asus2, Asus4, A7). More qualities (m7, maj7, diminished, augmented, ...) are expected to be
+- Currently ships 11 qualities, in display order: **major, minor, maj7, m7, dominant 7th, sus4,
+  sus2, maj9, m9, dominant 11th, dominant 13th** (e.g. root A → A, Am, Amaj7, Am7, A7, Asus4,
+  Asus2, Amaj9, Am9, A11, A13). More qualities (diminished, augmented, ...) are expected to be
   added later as a simple list extension, not a redesign.
+- The extended qualities (maj7/m7/dom7 and up) use the full literal stack of chord-tone
+  intervals (not simplified/omit-note jazz voicings) — the guitar shape engine resolves
+  whichever of those tones fit within reach on each string.
 - Each chord is voiced as a real, open-position guitar chord shape (like a chord chart),
   not an arbitrary triad in some octave.
 - For root/quality combinations with no common open-position shape, fall back to a barre
@@ -85,4 +89,6 @@ Four panels on one screen:
 - Minimum number of chords that must be selected before the Play button is enabled.
 - Exact strum timing (ms between notes) and chord sustain length.
 - Naming/labeling convention for accidentals (e.g. F# vs Gb roots).
+- Whether maj9/m9/dom11/dom13 should eventually get hand-curated, idiomatic guitar voicings
+  (omitting clashing tones) instead of relying solely on the generic fallback shape.
 - Which qualities to add next after dom7 (m7? maj7? diminished? augmented?) and in what order.

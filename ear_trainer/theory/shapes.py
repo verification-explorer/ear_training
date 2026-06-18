@@ -41,6 +41,12 @@ CURATED_OPEN_SHAPES: dict[str, list[int | None]] = {
     "G7": [3, 2, 0, 0, 0, 1],
     "C7": [None, 3, 2, 3, 1, 0],
     "B7": [None, 2, 1, 2, 0, 2],
+    "Cmaj7": [None, 3, 2, 0, 0, 0],
+    "Dm7": [None, None, 0, 2, 1, 1],
+    "Em7": [0, 2, 0, 0, 0, 0],
+    "Am7": [None, 0, 2, 0, 1, 0],
+    "Amaj7": [None, 0, 2, 1, 2, 0],
+    "Emaj7": [0, 2, 1, 1, 0, 0],
 }
 
 # Movable barre shapes, built from the open-E and open-A templates, keyed by quality. Add a

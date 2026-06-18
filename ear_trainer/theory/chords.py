@@ -12,13 +12,34 @@ QUALITY_INTERVALS = {
     "sus2": (2, 7),
     "sus4": (5, 7),
     "dom7": (4, 7, 10),
+    "maj7": (4, 7, 11),
+    "min7": (3, 7, 10),
+    "maj9": (4, 7, 11, 14),
+    "min9": (3, 7, 10, 14),
+    "dom11": (4, 7, 10, 14, 17),
+    "dom13": (4, 7, 10, 14, 17, 21),
 }
 
 # The qualities shown for a selected root, in display order. Extend this list to add more
-# (e.g. m7, maj7, diminished, augmented) without changing how chords are built.
-DEFAULT_QUALITIES = ["maj", "min", "sus2", "sus4", "dom7"]
+# without changing how chords are built.
+DEFAULT_QUALITIES = [
+    "maj", "min", "maj7", "min7", "dom7", "sus4", "sus2", "maj9", "min9", "dom11", "dom13",
+]
 
-_QUALITY_SUFFIX = {"maj": "", "min": "m", "dim": "dim", "sus2": "sus2", "sus4": "sus4", "dom7": "7"}
+_QUALITY_SUFFIX = {
+    "maj": "",
+    "min": "m",
+    "dim": "dim",
+    "sus2": "sus2",
+    "sus4": "sus4",
+    "dom7": "7",
+    "maj7": "maj7",
+    "min7": "m7",
+    "maj9": "maj9",
+    "min9": "m9",
+    "dom11": "11",
+    "dom13": "13",
+}
 
 
 @dataclass(frozen=True)
