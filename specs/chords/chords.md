@@ -34,13 +34,16 @@ Four panels on one screen:
    clicking a chord in the tray just plays that chord — no scoring, no round started. This
    lets the user ear-train on the selected chords before being quizzed on them.
 3. User presses **Play**. The app picks one chord at random from the tray and plays it,
-   excluding whichever chord was played last (no immediate repeat). This starts a round.
+   excluding whichever chord was played last (no immediate repeat). This starts a round, and
+   the button's label changes to **Repeat**.
 4. Once a round is active, clicking a chord in the tray submits it as a guess instead of
    previewing it.
 5. The round result (chord played, chord guessed, correct/wrong) is added to the top of the
    scoreboard's history list and the tally updates.
-6. Before guessing, the user may press **Play** again to replay the *same* chord that's
-   currently up for guessing (does not advance to a new chord).
+6. While a round is active, the user may press **Repeat** as many times as they want to
+   replay the *same* chord that's currently up for guessing (does not advance to a new
+   chord). Once a guess is submitted, the round ends and the button reverts to **Play**,
+   ready to start the next round.
 
 ## Chord vocabulary & voicing
 

@@ -4,6 +4,7 @@ Pick a root note, build a pool of chords to be quizzed on, then guess each
 chord the app plays back. See specs/chords/chords.md for the full spec.
 """
 
+import numpy as np
 import streamlit as st
 
 from ear_trainer.audio.playback import to_wav_bytes
@@ -26,6 +27,8 @@ if "current_chord" not in st.session_state:
     st.session_state.current_chord: Chord | None = None
 if "current_audio" not in st.session_state:
     st.session_state.current_audio: bytes | None = None
+if "audio_nonce" not in st.session_state:
+    st.session_state.audio_nonce = 0
 
 pool: list[Chord] = st.session_state.pool
 exercise: ChordExercise = st.session_state.exercise
@@ -39,9 +42,18 @@ def _toggle_chord(chord: Chord) -> None:
 
 
 def _play_chord(chord: Chord) -> bytes:
+    """Render `chord` to WAV bytes.
+
+    Appends a few inaudible trailing-silence frames that vary each call, so
+    repeated plays of the same chord produce distinct bytes — otherwise the
+    audio widget below sees identical data and the browser won't restart
+    playback (no audible "repeat").
+    """
+    st.session_state.audio_nonce += 1
     midi_notes = shape_to_midi_notes(get_shape(chord))
     samples = render_strum(midi_notes)
-    return to_wav_bytes(samples)
+    padding = np.zeros((st.session_state.audio_nonce % 5 + 1, samples.shape[1]), dtype=samples.dtype)
+    return to_wav_bytes(np.concatenate([samples, padding]))
 
 
 left, middle, right = st.columns([1, 3, 1])
@@ -97,7 +109,8 @@ with middle:
                         st.session_state.current_audio = _play_chord(chord)
                     st.rerun()
         with tray_cols[-1]:
-            if st.button("▶ Play", key="play_button", disabled=not pool):
+            play_label = "🔁 Repeat" if st.session_state.current_chord is not None else "▶ Play"
+            if st.button(play_label, key="play_button", disabled=not pool):
                 if st.session_state.current_chord is None:
                     next_name = exercise.pick_next([c.name for c in pool])
                     st.session_state.current_chord = next(c for c in pool if c.name == next_name)

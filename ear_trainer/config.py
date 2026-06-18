@@ -21,8 +21,9 @@ SAMPLE_RATE = 44100  # Hz
 # back to a General MIDI soundfont commonly installed at the OS level.
 _BUNDLED_SOUNDFONTS = sorted(ASSETS_DIR.glob("soundfonts/*.sf2"))
 _SYSTEM_SOUNDFONT_FALLBACKS = [
-    Path("/usr/share/sounds/sf2/TimGM6mb.sf2"),
+    Path("/usr/share/sounds/sf2/FluidR3_GM.sf2"),
     Path("/usr/share/sounds/sf2/default-GM.sf2"),
+    Path("/usr/share/sounds/sf2/TimGM6mb.sf2"),
 ]
 SOUNDFONT_PATH = next(
     (p for p in [*_BUNDLED_SOUNDFONTS, *_SYSTEM_SOUNDFONT_FALLBACKS] if p.exists()),
@@ -30,7 +31,7 @@ SOUNDFONT_PATH = next(
 )
 
 # General MIDI program number (0-indexed) for the chord playback instrument.
-GUITAR_PROGRAM = 24  # Acoustic Guitar (nylon)
+GUITAR_PROGRAM = 25  # Acoustic Guitar (steel)
 
 # Strum timing
 STRUM_DELAY_SECONDS = 0.03
