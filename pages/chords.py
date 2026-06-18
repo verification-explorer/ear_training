@@ -10,6 +10,7 @@ import streamlit as st
 from ear_trainer.audio.playback import to_wav_bytes
 from ear_trainer.audio.soundfont import render_strum, warm_up
 from ear_trainer.config import SAMPLE_RATE
+from ear_trainer.database.rounds import record_round
 from ear_trainer.exercises.chords import ChordExercise
 from ear_trainer.theory.chords import Chord, chords_for_root
 from ear_trainer.theory.notes import NOTE_NAMES
@@ -141,6 +142,12 @@ with middle:
                     if guessing:
                         result = exercise.record_guess(
                             played=st.session_state.current_chord.name, guessed=chord.name
+                        )
+                        record_round(
+                            "chords",
+                            played=result.played,
+                            guessed=result.guessed,
+                            pool=[c.name for c in pool],
                         )
                         st.session_state.current_chord = None
                         if result.correct:
