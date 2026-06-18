@@ -52,9 +52,9 @@ Four panels on one screen:
 
 - For a selected root, the chords window shows a curated, expandable list of qualities built
   directly on that root — no scale or key context involved.
-- v1 ships 4 qualities: **major, minor, sus2, sus4** (e.g. root A → A, Am, Asus2, Asus4). More
-  qualities (7ths, diminished, augmented, ...) are expected to be added later as a simple list
-  extension, not a redesign.
+- Currently ships 5 qualities: **major, minor, sus2, sus4, dominant 7th** (e.g. root A → A, Am,
+  Asus2, Asus4, A7). More qualities (m7, maj7, diminished, augmented, ...) are expected to be
+  added later as a simple list extension, not a redesign.
 - Each chord is voiced as a real, open-position guitar chord shape (like a chord chart),
   not an arbitrary triad in some octave.
 - For root/quality combinations with no common open-position shape, fall back to a barre
@@ -84,6 +84,5 @@ Four panels on one screen:
 
 - Minimum number of chords that must be selected before the Play button is enabled.
 - Exact strum timing (ms between notes) and chord sustain length.
-- Which specific free guitar `.sf2` to use — needs sourcing and licensing check.
 - Naming/labeling convention for accidentals (e.g. F# vs Gb roots).
-- Which qualities to add next (7ths? diminished? augmented?) and in what order.
+- Which qualities to add next after dom7 (m7? maj7? diminished? augmented?) and in what order.

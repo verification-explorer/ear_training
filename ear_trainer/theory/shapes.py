@@ -35,6 +35,26 @@ CURATED_OPEN_SHAPES: dict[str, list[int | None]] = {
     "Dsus2": [None, None, 0, 2, 3, 0],
     "Dsus4": [None, None, 0, 2, 3, 3],
     "Esus4": [0, 2, 2, 2, 0, 0],
+    "E7": [0, 2, 0, 1, 0, 0],
+    "A7": [None, 0, 2, 0, 2, 0],
+    "D7": [None, None, 0, 2, 1, 2],
+    "G7": [3, 2, 0, 0, 0, 1],
+    "C7": [None, 3, 2, 3, 1, 0],
+    "B7": [None, 2, 1, 2, 0, 2],
+}
+
+# Movable barre shapes, built from the open-E and open-A templates, keyed by quality. Add a
+# row here (plus a curated open shape above if one exists) to support a new quality's barre
+# voicing for roots without one.
+_E_SHAPE_OFFSETS = {
+    "maj": (0, 2, 2, 1, 0, 0),
+    "min": (0, 2, 2, 0, 0, 0),
+    "dom7": (0, 2, 0, 1, 0, 0),
+}
+_A_SHAPE_OFFSETS = {
+    "maj": (0, 2, 2, 2, 0),
+    "min": (0, 2, 2, 1, 0),
+    "dom7": (0, 2, 0, 2, 0),
 }
 
 
@@ -45,9 +65,9 @@ def _barre_shape(root_pc: int, quality: str) -> list[int | None]:
 
     if barre_from_e <= barre_from_a:
         b = barre_from_e
-        return [b, b + 2, b + 2, b + 1 if quality == "maj" else b, b, b]
+        return [b + offset for offset in _E_SHAPE_OFFSETS[quality]]
     b = barre_from_a
-    return [None, b, b + 2, b + 2, b + 2 if quality == "maj" else b + 1, b]
+    return [None, *(b + offset for offset in _A_SHAPE_OFFSETS[quality])]
 
 
 def _generic_shape(chord_tone_pcs: set[int]) -> list[int | None]:
@@ -66,12 +86,11 @@ def get_shape(chord: Chord) -> list[int | None]:
     if chord.name in CURATED_OPEN_SHAPES:
         return CURATED_OPEN_SHAPES[chord.name]
 
-    if chord.quality in ("maj", "min"):
+    if chord.quality in _E_SHAPE_OFFSETS:
         return _barre_shape(pitch_class(chord.root), chord.quality)
 
-    second, third = QUALITY_INTERVALS[chord.quality]
     root_pc = pitch_class(chord.root)
-    chord_tone_pcs = {root_pc, (root_pc + second) % 12, (root_pc + third) % 12}
+    chord_tone_pcs = {root_pc, *((root_pc + i) % 12 for i in QUALITY_INTERVALS[chord.quality])}
     return _generic_shape(chord_tone_pcs)
 
 
