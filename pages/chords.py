@@ -9,6 +9,7 @@ import streamlit as st
 
 from ear_trainer.audio.playback import to_wav_bytes
 from ear_trainer.audio.soundfont import render_strum
+from ear_trainer.config import SAMPLE_RATE
 from ear_trainer.exercises.chords import ChordExercise
 from ear_trainer.theory.chords import Chord, chords_for_root
 from ear_trainer.theory.notes import NOTE_NAMES
@@ -25,10 +26,10 @@ if "selected_root" not in st.session_state:
     st.session_state.selected_root = None
 if "current_chord" not in st.session_state:
     st.session_state.current_chord: Chord | None = None
-if "current_audio" not in st.session_state:
-    st.session_state.current_audio: bytes | None = None
 if "audio_nonce" not in st.session_state:
     st.session_state.audio_nonce = 0
+if "current_audio" not in st.session_state:
+    st.session_state.current_audio: bytes | None = None
 
 pool: list[Chord] = st.session_state.pool
 exercise: ChordExercise = st.session_state.exercise
@@ -41,19 +42,30 @@ def _toggle_chord(chord: Chord) -> None:
         st.session_state.pool = [*pool, chord]
 
 
+_LEAD_IN_SECONDS = 0.2
+
+
 def _play_chord(chord: Chord) -> bytes:
     """Render `chord` to WAV bytes.
 
-    Appends a few inaudible trailing-silence frames that vary each call, so
-    repeated plays of the same chord produce distinct bytes — otherwise the
-    audio widget below sees identical data and the browser won't restart
-    playback (no audible "repeat").
+    Prepends a brief silent lead-in: on the first playback in a browser
+    session, there's a gap between the player's progress bar starting and
+    audible sound actually arriving (confirmed by watching the bar vs. the
+    sound) — the start of the real clip gets swallowed by browser playback
+    startup latency. Padding the front with silence means that latency eats
+    silence instead of the chord's attack.
+
+    Also appends a few inaudible trailing-silence frames that vary each
+    call, so repeated plays of the same chord produce distinct bytes —
+    otherwise the audio widget sees identical data and the browser won't
+    restart playback (no audible "repeat").
     """
     st.session_state.audio_nonce += 1
     midi_notes = shape_to_midi_notes(get_shape(chord))
     samples = render_strum(midi_notes)
-    padding = np.zeros((st.session_state.audio_nonce % 5 + 1, samples.shape[1]), dtype=samples.dtype)
-    return to_wav_bytes(np.concatenate([samples, padding]))
+    lead_in = np.zeros((int(_LEAD_IN_SECONDS * SAMPLE_RATE), samples.shape[1]), dtype=samples.dtype)
+    trail_padding = np.zeros((st.session_state.audio_nonce % 5 + 1, samples.shape[1]), dtype=samples.dtype)
+    return to_wav_bytes(np.concatenate([lead_in, samples, trail_padding]))
 
 
 left, middle, right = st.columns([1, 3, 1])
