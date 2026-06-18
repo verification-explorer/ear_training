@@ -1,0 +1,12 @@
+# Web UI
+streamlit>=1.36
+
+# Audio synthesis & file handling
+numpy>=1.26
+soundfile>=0.12
+
+# Data / progress tracking
+pandas>=2.2
+
+# Realistic guitar sounds via SoundFonts (requires system libfluidsynth)
+pyfluidsynth>=1.3
