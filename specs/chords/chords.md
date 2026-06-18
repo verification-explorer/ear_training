@@ -21,7 +21,10 @@ Four panels on one screen:
   common chords built directly on that root (e.g. root A → A, Am, Asus2, Asus4), one button
   each. No notion of "key" — each chord stands on its own. Clicking a chord adds it to the
   selected tray; it stays clickable to add more chords after picking a different root too
-  (selection accumulates across roots).
+  (selection accumulates across roots). A **Simple chords / All chords** toggle above the
+  picker switches between showing just maj/min (e.g. A, Am) and the full quality list — the
+  label always names the action the next click performs. Toggling never removes anything
+  already in the tray, even chords outside the current filter.
 - **Selected chords (middle, lower)** — tray of every chord added so far. Clicking a chord
   here again removes it from the tray. A **Play** button sits at the right of this row. A
   **Clear all** button above the tray empties it in one click and cancels any round in
@@ -36,9 +39,9 @@ Four panels on one screen:
 2. **Preview**: while no round is active (before the first Play, or right after a guess),
    clicking a chord in the tray just plays that chord — no scoring, no round started. This
    lets the user ear-train on the selected chords before being quizzed on them.
-3. User presses **Play**. The app picks one chord at random from the tray and plays it,
-   excluding whichever chord was played last (no immediate repeat). This starts a round, and
-   the button's label changes to **Repeat**.
+3. User presses **Play**. The app picks one chord fully at random from the tray and plays it
+   (the same chord can come up twice in a row). This starts a round, and the button's label
+   changes to **Repeat**.
 4. Once a round is active, clicking a chord in the tray submits it as a guess instead of
    previewing it.
 5. The round result (chord played, chord guessed, correct/wrong) is added to the top of the

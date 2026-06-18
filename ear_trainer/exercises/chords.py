@@ -17,14 +17,10 @@ class RoundResult:
 @dataclass
 class ChordExercise:
     history: list[RoundResult] = field(default_factory=list)
-    _last_played: str | None = field(default=None, repr=False)
 
     def pick_next(self, pool: list[str]) -> str:
-        """Pick a random chord from `pool`, avoiding an immediate repeat."""
-        choices = [c for c in pool if c != self._last_played] or pool
-        choice = random.choice(choices)
-        self._last_played = choice
-        return choice
+        """Pick a random chord from `pool` (the same chord can come up twice in a row)."""
+        return random.choice(pool)
 
     def record_guess(self, played: str, guessed: str) -> RoundResult:
         result = RoundResult(played=played, guessed=guessed)

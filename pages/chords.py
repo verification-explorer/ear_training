@@ -32,7 +32,9 @@ if "pool" not in st.session_state:
 if "exercise" not in st.session_state:
     st.session_state.exercise = ChordExercise()
 if "selected_root" not in st.session_state:
-    st.session_state.selected_root = None
+    st.session_state.selected_root = "A"
+if "simple_mode" not in st.session_state:
+    st.session_state.simple_mode = False
 if "current_chord" not in st.session_state:
     st.session_state.current_chord: Chord | None = None
 if "audio_nonce" not in st.session_state:
@@ -94,11 +96,18 @@ with left:
 
 with middle:
     st.subheader("Chords")
+    toggle_label = "Simple chords" if not st.session_state.simple_mode else "All chords"
+    if st.button(toggle_label, key="quality_toggle"):
+        st.session_state.simple_mode = not st.session_state.simple_mode
+        st.rerun()
+
     root = st.session_state.selected_root
     if root is None:
         st.caption("Pick a root note to see its common chords.")
     else:
         chords = chords_for_root(root)
+        if st.session_state.simple_mode:
+            chords = [c for c in chords if c.quality in ("maj", "min")]
         cols = st.columns(len(chords))
         pool_names = {c.name for c in pool}
         for col, chord in zip(cols, chords):
