@@ -117,6 +117,7 @@ with middle:
                     chord.name,
                     key=f"chord_{root}_{chord.name}",
                     type="primary" if selected else "secondary",
+                    help=chord.description,
                 ):
                     _toggle_chord(chord)
                     st.rerun()
@@ -136,7 +137,7 @@ with middle:
         for col, chord in zip(tray_cols[:-1], pool):
             with col:
                 guessing = st.session_state.current_chord is not None
-                if st.button(chord.name, key=f"tray_{chord.name}"):
+                if st.button(chord.name, key=f"tray_{chord.name}", help=chord.description):
                     if guessing:
                         result = exercise.record_guess(
                             played=st.session_state.current_chord.name, guessed=chord.name

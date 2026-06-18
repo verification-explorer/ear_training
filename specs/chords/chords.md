@@ -24,7 +24,9 @@ Four panels on one screen:
   (selection accumulates across roots). A **Simple chords / All chords** toggle above the
   picker switches between showing just maj/min (e.g. A, Am) and the full quality list — the
   label always names the action the next click performs. Toggling never removes anything
-  already in the tray, even chords outside the current filter.
+  already in the tray, even chords outside the current filter. Hovering any chord button
+  (here and in the tray below) shows a tooltip listing the chord's notes (e.g. "Notes: A,
+  C#, E, G").
 - **Selected chords (middle, lower)** — tray of every chord added so far. Clicking a chord
   here again removes it from the tray. A **Play** button sits at the right of this row. A
   **Clear all** button above the tray empties it in one click and cancels any round in

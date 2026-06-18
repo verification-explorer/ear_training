@@ -41,7 +41,6 @@ _QUALITY_SUFFIX = {
     "dom13": "13",
 }
 
-
 @dataclass(frozen=True)
 class Chord:
     root: str
@@ -54,6 +53,10 @@ class Chord:
     @property
     def notes(self) -> tuple[str, ...]:
         return (self.root, *(transpose(self.root, i) for i in QUALITY_INTERVALS[self.quality]))
+
+    @property
+    def description(self) -> str:
+        return f"Notes: {', '.join(self.notes)}"
 
 
 def chords_for_root(root: str) -> list[Chord]:
