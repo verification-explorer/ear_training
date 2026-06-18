@@ -54,3 +54,17 @@ def render_strum(midi_notes: list[int]) -> np.ndarray:
 
     samples = np.concatenate(chunks).astype(np.float32) / 32768.0
     return samples.reshape(-1, 2)
+
+
+def warm_up() -> None:
+    """Render and discard a throwaway note.
+
+    Streamlit runs each browser session in its own worker thread. Part of
+    the fix for clipped/fuzzy first-chord audio is calling this once per
+    session, in that same thread, before any real chord is rendered (see
+    pages/chords.py). Combined with the silent lead-in padding in
+    `_play_chord`, this is the confirmed-working combination — don't remove
+    either half without the user re-testing live audio first.
+    """
+    if SOUNDFONT_PATH is not None:
+        render_strum([60])

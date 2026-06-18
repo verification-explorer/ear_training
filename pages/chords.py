@@ -8,7 +8,7 @@ import numpy as np
 import streamlit as st
 
 from ear_trainer.audio.playback import to_wav_bytes
-from ear_trainer.audio.soundfont import render_strum
+from ear_trainer.audio.soundfont import render_strum, warm_up
 from ear_trainer.config import SAMPLE_RATE
 from ear_trainer.exercises.chords import ChordExercise
 from ear_trainer.theory.chords import Chord, chords_for_root
@@ -17,6 +17,15 @@ from ear_trainer.theory.shapes import get_shape, shape_to_midi_notes
 
 st.set_page_config(page_title="Chords — Ear Trainer", page_icon="🎸", layout="wide")
 st.title("🎸 Chords")
+
+if "warmed_up" not in st.session_state:
+    # Streamlit runs each browser session in its own worker thread; warm up
+    # FluidSynth in this session's thread, once, before any real chord is
+    # rendered. Confirmed necessary together with the lead-in padding below
+    # and the always-mounted audio element — don't strip any of the three
+    # without the user re-testing live audio first.
+    warm_up()
+    st.session_state.warmed_up = True
 
 if "pool" not in st.session_state:
     st.session_state.pool: list[Chord] = []
@@ -29,7 +38,14 @@ if "current_chord" not in st.session_state:
 if "audio_nonce" not in st.session_state:
     st.session_state.audio_nonce = 0
 if "current_audio" not in st.session_state:
-    st.session_state.current_audio: bytes | None = None
+    # Seed with a real silent clip so the <audio> element mounts once, here,
+    # rather than on the user's first real Play — never reset this to None
+    # afterward (see the tray click handler below); a freshly-mounted
+    # element has one-time browser startup latency that can clip the start
+    # of playback, so the element must persist across the whole session.
+    st.session_state.current_audio: bytes = to_wav_bytes(
+        np.zeros((SAMPLE_RATE // 2, 2), dtype=np.float32)
+    )
 
 pool: list[Chord] = st.session_state.pool
 exercise: ChordExercise = st.session_state.exercise
@@ -112,7 +128,6 @@ with middle:
                             played=st.session_state.current_chord.name, guessed=chord.name
                         )
                         st.session_state.current_chord = None
-                        st.session_state.current_audio = None
                         if result.correct:
                             st.toast(f"Correct! It was {result.played}.", icon="✅")
                         else:
@@ -129,8 +144,7 @@ with middle:
                 st.session_state.current_audio = _play_chord(st.session_state.current_chord)
                 st.rerun()
 
-    if st.session_state.current_audio:
-        st.audio(st.session_state.current_audio, format="audio/wav", autoplay=True)
+    st.audio(st.session_state.current_audio, format="audio/wav", autoplay=True)
 
 with right:
     st.subheader("Scoreboard")
