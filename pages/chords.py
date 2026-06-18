@@ -155,6 +155,9 @@ with right:
     st.subheader("Scoreboard")
     correct, total = exercise.tally
     st.metric("Score", f"{correct}/{total}")
+    if exercise.history and st.button("🧹 Clear history", key="clear_history"):
+        exercise.history.clear()
+        st.rerun()
     for r in exercise.history:
         icon = "✅" if r.correct else "❌"
         st.write(f"{icon} played **{r.played}**, guessed **{r.guessed}**")

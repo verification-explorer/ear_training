@@ -27,7 +27,8 @@ Four panels on one screen:
   **Clear all** button above the tray empties it in one click and cancels any round in
   progress.
 - **Scoreboard (right, vertical)** — running history of rounds, newest on top: played chord,
-  guessed chord, and correct/wrong, plus a running tally (e.g. "7/10 correct").
+  guessed chord, and correct/wrong, plus a running tally (e.g. "7/10 correct"). A
+  **Clear history** button (shown once there's history) resets the history and tally.
 
 ## Game flow
 
