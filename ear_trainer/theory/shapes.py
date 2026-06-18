@@ -7,11 +7,11 @@ Resolution order:
 1. A curated open-position shape, for the handful of chords that have one.
 2. A movable barre shape (built from the open-E or open-A template), for any
    other major/minor chord.
-3. A generic per-string nearest-fret search, for anything else (e.g. the
-   diminished vii° chords, which have no common open or barre shape).
+3. A generic per-string nearest-fret search, for anything else (e.g. sus2/sus4
+   or diminished chords with no curated open or barre shape).
 """
 
-from ear_trainer.theory.chords import TRIAD_INTERVALS, Chord
+from ear_trainer.theory.chords import QUALITY_INTERVALS, Chord
 from ear_trainer.theory.notes import pitch_class
 
 # Low E, A, D, G, B, high E
@@ -30,6 +30,11 @@ CURATED_OPEN_SHAPES: dict[str, list[int | None]] = {
     "Dm": [None, None, 0, 2, 3, 1],
     "G": [3, 2, 0, 0, 0, 3],
     "C": [None, 3, 2, 0, 1, 0],
+    "Asus2": [None, 0, 2, 2, 0, 0],
+    "Asus4": [None, 0, 2, 2, 3, 0],
+    "Dsus2": [None, None, 0, 2, 3, 0],
+    "Dsus4": [None, None, 0, 2, 3, 3],
+    "Esus4": [0, 2, 2, 2, 0, 0],
 }
 
 
@@ -64,9 +69,9 @@ def get_shape(chord: Chord) -> list[int | None]:
     if chord.quality in ("maj", "min"):
         return _barre_shape(pitch_class(chord.root), chord.quality)
 
-    third, fifth = TRIAD_INTERVALS[chord.quality]
+    second, third = QUALITY_INTERVALS[chord.quality]
     root_pc = pitch_class(chord.root)
-    chord_tone_pcs = {root_pc, (root_pc + third) % 12, (root_pc + fifth) % 12}
+    chord_tone_pcs = {root_pc, (root_pc + second) % 12, (root_pc + third) % 12}
     return _generic_shape(chord_tone_pcs)
 
 

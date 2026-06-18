@@ -1,29 +1,29 @@
-"""Chord construction: qualities, triads, and the diatonic chords of a major key."""
+"""Chord construction: build common chord qualities directly on a given root."""
 
 from dataclasses import dataclass
 
 from ear_trainer.theory.notes import transpose
-from ear_trainer.theory.scales import major_scale
 
-# Triad quality -> (third interval, fifth interval) in semitones from the root.
-TRIAD_INTERVALS = {
+# Quality -> (interval to 2nd chord tone, interval to 3rd chord tone) in semitones from the root.
+QUALITY_INTERVALS = {
     "maj": (4, 7),
     "min": (3, 7),
     "dim": (3, 6),
+    "sus2": (2, 7),
+    "sus4": (5, 7),
 }
 
-# Quality of each scale-degree triad (I, ii, iii, IV, V, vi, vii) in a major key.
-DIATONIC_QUALITIES = ["maj", "min", "min", "maj", "maj", "min", "dim"]
-ROMAN_NUMERALS = ["I", "ii", "iii", "IV", "V", "vi", "vii°"]
+# The qualities shown for a selected root, in display order. Extend this list to add more
+# (e.g. 7ths, diminished, augmented) without changing how chords are built.
+DEFAULT_QUALITIES = ["maj", "min", "sus2", "sus4"]
 
-_QUALITY_SUFFIX = {"maj": "", "min": "m", "dim": "dim"}
+_QUALITY_SUFFIX = {"maj": "", "min": "m", "dim": "dim", "sus2": "sus2", "sus4": "sus4"}
 
 
 @dataclass(frozen=True)
 class Chord:
     root: str
     quality: str
-    roman_numeral: str
 
     @property
     def name(self) -> str:
@@ -31,14 +31,10 @@ class Chord:
 
     @property
     def notes(self) -> tuple[str, str, str]:
-        third, fifth = TRIAD_INTERVALS[self.quality]
-        return (self.root, transpose(self.root, third), transpose(self.root, fifth))
+        second, third = QUALITY_INTERVALS[self.quality]
+        return (self.root, transpose(self.root, second), transpose(self.root, third))
 
 
-def diatonic_triads(key_root: str) -> list[Chord]:
-    """The 7 diatonic triads of the major key rooted at `key_root`."""
-    scale = major_scale(key_root)
-    return [
-        Chord(root=scale[degree], quality=DIATONIC_QUALITIES[degree], roman_numeral=ROMAN_NUMERALS[degree])
-        for degree in range(7)
-    ]
+def chords_for_root(root: str) -> list[Chord]:
+    """The curated set of common chords built directly on `root` (no scale/key context)."""
+    return [Chord(root=root, quality=quality) for quality in DEFAULT_QUALITIES]

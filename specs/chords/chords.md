@@ -16,12 +16,12 @@ their own specs. No stub navigation is needed yet.
 
 Four panels on one screen:
 
-- **Chord root (left, vertical)** — one button per root note (A, B, C, ...). Clicking a
-  root treats it as the tonic of a major key.
-- **Chords (middle, upper)** — populated after a root is picked, showing the 7 diatonic
-  triads of that major key (I, ii, iii, IV, V, vi, vii°), one button each. Clicking a chord
-  adds it to the selected tray; it stays clickable to add more chords after picking a
-  different root too (selection accumulates across roots).
+- **Chord root (left, vertical)** — one button per root note (A, B, C, ...).
+- **Chords (middle, upper)** — populated after a root is picked, showing a curated set of
+  common chords built directly on that root (e.g. root A → A, Am, Asus2, Asus4), one button
+  each. No notion of "key" — each chord stands on its own. Clicking a chord adds it to the
+  selected tray; it stays clickable to add more chords after picking a different root too
+  (selection accumulates across roots).
 - **Selected chords (middle, lower)** — tray of every chord added so far. Clicking a chord
   here again removes it from the tray. A **Play** button sits at the right of this row.
 - **Scoreboard (right, vertical)** — running history of rounds, newest on top: played chord,
@@ -40,12 +40,15 @@ Four panels on one screen:
 
 ## Chord vocabulary & voicing
 
-- Chords are the 7 diatonic triads of the major key rooted at the selected note.
+- For a selected root, the chords window shows a curated, expandable list of qualities built
+  directly on that root — no scale or key context involved.
+- v1 ships 4 qualities: **major, minor, sus2, sus4** (e.g. root A → A, Am, Asus2, Asus4). More
+  qualities (7ths, diminished, augmented, ...) are expected to be added later as a simple list
+  extension, not a redesign.
 - Each chord is voiced as a real, open-position guitar chord shape (like a chord chart),
   not an arbitrary triad in some octave.
-- For diatonic chords with no common open-position shape (e.g. some vii° chords, or
-  sharp/flat roots), fall back to a barre chord shape or a generic shape covering the same
-  notes.
+- For root/quality combinations with no common open-position shape, fall back to a barre
+  chord shape (major/minor) or a generic shape covering the same notes (everything else).
 - Needs a chord-shape data table (root + quality → fret/string positions) living in
   `ear_trainer/theory`.
 
@@ -60,8 +63,8 @@ Four panels on one screen:
 
 ## Technical notes
 
-- New logic needed in `ear_trainer/theory` (chord/scale/shape data: diatonic triads per
-  major key, open-chord-shape lookup table) and `ear_trainer/audio` (SoundFont loading +
+- New logic needed in `ear_trainer/theory` (chord/quality/shape data: per-root chord
+  construction, open-chord-shape lookup table) and `ear_trainer/audio` (SoundFont loading +
   strummed playback), per the dependency direction in `CLAUDE.md` (`theory` →
   `audio`/`exercises`).
 - Scoring is in-memory only for this version — no `ear_trainer/database` wiring yet; the
@@ -72,4 +75,5 @@ Four panels on one screen:
 - Minimum number of chords that must be selected before the Play button is enabled.
 - Exact strum timing (ms between notes) and chord sustain length.
 - Which specific free guitar `.sf2` to use — needs sourcing and licensing check.
-- Naming/labeling convention for accidentals (e.g. F#m vs Gbm) in keys with flats.
+- Naming/labeling convention for accidentals (e.g. F# vs Gb roots).
+- Which qualities to add next (7ths? diminished? augmented?) and in what order.

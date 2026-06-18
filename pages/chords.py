@@ -1,6 +1,6 @@
 """Chords exercise page.
 
-Pick a key root, build a pool of chords to be quizzed on, then guess each
+Pick a root note, build a pool of chords to be quizzed on, then guess each
 chord the app plays back. See specs/chords/chords.md for the full spec.
 """
 
@@ -9,7 +9,7 @@ import streamlit as st
 from ear_trainer.audio.playback import to_wav_bytes
 from ear_trainer.audio.soundfont import render_strum
 from ear_trainer.exercises.chords import ChordExercise
-from ear_trainer.theory.chords import Chord, diatonic_triads
+from ear_trainer.theory.chords import Chord, chords_for_root
 from ear_trainer.theory.notes import NOTE_NAMES
 from ear_trainer.theory.shapes import get_shape, shape_to_midi_notes
 
@@ -56,9 +56,9 @@ with middle:
     st.subheader("Chords")
     root = st.session_state.selected_root
     if root is None:
-        st.caption("Pick a root note to see its diatonic chords.")
+        st.caption("Pick a root note to see its common chords.")
     else:
-        chords = diatonic_triads(root)
+        chords = chords_for_root(root)
         cols = st.columns(len(chords))
         pool_names = {c.name for c in pool}
         for col, chord in zip(cols, chords):
